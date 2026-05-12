@@ -139,6 +139,30 @@ Host web-gateway-yandex
 ssh web-gateway-yandex "qrencode -t ansiutf8 < /etc/wireguard/clients/<name>.conf"
 ```
 
+## Troubleshooting
+
+**Clients connect but can't reach the internet**
+
+Check the IP range of the VM — it must be an official Yandex Cloud range (see checklist above).
+
+**Multiple clients — traffic not routing correctly**
+
+On the server, each peer must have a unique `/32` IP in `AllowedIPs`, not `0.0.0.0/0`.
+
+Wrong (causes conflict when multiple peers):
+```ini
+[Peer]
+AllowedIPs = 0.0.0.0/0
+```
+
+Correct:
+```ini
+[Peer]
+AllowedIPs = 10.0.0.2/32
+```
+
+`AllowedIPs = 0.0.0.0/0` belongs only in the **client** config — it tells the client to route all traffic through the tunnel. On the server it means something different: which source IPs are allowed from that peer.
+
 ## Notes
 
 - Both `ru-central1-a` and `ru-central1-d` can work — what matters is the IP range, not the zone. Always verify via `whois`
