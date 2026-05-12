@@ -103,12 +103,36 @@ yc compute instance update-network-interface <instance-id> \
   --security-group-id <sg-id>
 ```
 
+## After VM recreation checklist
+
+Every time a VM is recreated or restarted, the public IP changes. Before updating the client:
+
+**1. Verify the IP is in the official Yandex Cloud range:**
+
+```bash
+whois <new-ip> | grep netname
+```
+
+Must return `RU-YANDEXCLOUD-*`. If it returns anything else (e.g. `STUB-*`) — the VPN will not work for most sites. Recreate the VM to get a new IP.
+
+**2. Update SSH config locally:**
+
+```
+Host web-gateway-yandex
+    HostName <new-ip>
+    Port 2222
+```
+
+**3. Generate a new QR code for the client:**
+
+```bash
+ssh web-gateway-yandex "qrencode -t ansiutf8 < /etc/wireguard/clients/<name>.conf"
+```
+
 ## Notes
 
-- VM zone: `ru-central1-a` — required for IP forwarding to work in YC
+- VM zone: `ru-central1-d` works (Yandex Cloud `178.154.x.x` range). Avoid zones that issue `111.88.x.x` addresses
 - WireGuard port: `51820` UDP
 - VPN subnet: `10.0.0.0/24`, server at `10.0.0.1`
 - IAM token expires in 12h — regenerate with `yc iam create-token` before each `terraform apply`
 - Client configs stored at `/etc/wireguard/clients/` on the server
-- After VM recreation, verify the new IP is in a Yandex Cloud range before using it:
-  `whois <ip> | grep netname` must return `RU-YANDEXCLOUD-*`, otherwise recreate the VM
