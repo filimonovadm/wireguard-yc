@@ -110,10 +110,12 @@ Every time a VM is recreated or restarted, the public IP changes. Before updatin
 **1. Verify the IP is in the official Yandex Cloud range:**
 
 ```bash
-whois <new-ip> | grep netname
+whois -h whois.ripe.net <new-ip> | grep netname
 ```
 
-Must return `RU-YANDEXCLOUD-*`. If it returns anything else (e.g. `STUB-*`) — the VPN will not work for most sites. Recreate the VM to get a new IP.
+Must return `RU-YANDEXCLOUD`. If it returns anything else (e.g. `STUB-*`) — the VPN will not work for most sites. Recreate the VM to get a new IP.
+
+> Note: plain `whois <ip>` may not return detailed info for some ranges — always use `whois -h whois.ripe.net`.
 
 **2. Update SSH config locally:**
 
