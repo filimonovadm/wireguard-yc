@@ -110,12 +110,20 @@ Every time a VM is recreated or restarted, the public IP changes. Before updatin
 **1. Verify the IP is in the official Yandex Cloud range:**
 
 ```bash
-whois -h whois.ripe.net <new-ip> | grep netname
+whois <new-ip> | grep netname
 ```
 
-Must return `RU-YANDEXCLOUD`. If it returns anything else (e.g. `STUB-*`) — the VPN will not work for most sites. Recreate the VM to get a new IP.
+The output must contain `YANDEXCLOUD`. Examples:
 
-> Note: plain `whois <ip>` may not return detailed info for some ranges — always use `whois -h whois.ripe.net`.
+| IP | netname | Works? |
+|---|---|---|
+| `178.154.x.x` | `RU-YANDEXCLOUD-178158192` | ✅ |
+| `89.169.x.x` | `RU-YANDEXCLOUD-20060224` | ✅ |
+| `111.88.x.x` | `STUB-111-88-240SLASH20` | ❌ |
+
+If `netname` does not contain `YANDEXCLOUD` — recreate the VM to get a different IP.
+
+> For some IP ranges `whois` may show only a top-level block without `netname`. In that case use: `whois -h whois.ripe.net <ip> | grep netname`
 
 **2. Update SSH config locally:**
 
@@ -133,7 +141,8 @@ ssh web-gateway-yandex "qrencode -t ansiutf8 < /etc/wireguard/clients/<name>.con
 
 ## Notes
 
-- VM zone: `ru-central1-d` works (Yandex Cloud `178.154.x.x` range). Avoid zones that issue `111.88.x.x` addresses
+- Both `ru-central1-a` and `ru-central1-d` can work — what matters is the IP range, not the zone. Always verify via `whois`
+- Known good ranges: `89.169.x.x`, `178.154.x.x`. Known bad: `111.88.x.x`
 - WireGuard port: `51820` UDP
 - VPN subnet: `10.0.0.0/24`, server at `10.0.0.1`
 - IAM token expires in 12h — regenerate with `yc iam create-token` before each `terraform apply`
