@@ -1,5 +1,5 @@
-yc_token            = "your-iam-token"
-cloud_id            = "your-cloud-id"
-folder_id           = "your-folder-id"
-subnet_id           = "your-subnet-id-in-ru-central1-a"
+yc_token            = ""   # yc iam create-token
+cloud_id            = "b1g0og5epa4gl51a0d7f"
+folder_id           = "b1g7scs6lgrf9ijk4dff"
+subnet_id           = "e9b06pqsq4i6k0ohp9jb"   # subnet in ru-central1-a
 ssh_public_key_path = "~/.ssh/id_ed25519.pub"

@@ -17,15 +17,13 @@ cd terraform
 cp terraform.tfvars.example terraform.tfvars
 ```
 
-Edit `terraform.tfvars`:
+Edit `terraform.tfvars` — fill in `yc_token`:
 
-```hcl
-yc_token            = "your-iam-token"   # yc iam create-token
-cloud_id            = "your-cloud-id"
-folder_id           = "your-folder-id"
-subnet_id           = "subnet-id-in-ru-central1-a"
-ssh_public_key_path = "~/.ssh/id_ed25519.pub"
+```bash
+yc iam create-token
 ```
+
+Then apply:
 
 ```bash
 terraform init
@@ -56,7 +54,8 @@ ssh wgadmin@<external-ip> "sudo bash -s -- client-name" < scripts/remove-client.
 
 ## Notes
 
-- VM zone: `ru-central1-a` (required for IP forwarding to work in YC)
+- VM zone: `ru-central1-a` — required for IP forwarding to work in YC
 - WireGuard port: `51820` UDP
 - VPN subnet: `10.0.0.0/24`, server at `10.0.0.1`
+- IAM token expires in 12h — regenerate with `yc iam create-token` before each `terraform apply`
 - Client configs stored at `/etc/wireguard/clients/` on the server
