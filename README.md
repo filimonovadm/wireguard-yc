@@ -110,3 +110,5 @@ yc compute instance update-network-interface <instance-id> \
 - VPN subnet: `10.0.0.0/24`, server at `10.0.0.1`
 - IAM token expires in 12h — regenerate with `yc iam create-token` before each `terraform apply`
 - Client configs stored at `/etc/wireguard/clients/` on the server
+- After VM recreation, verify the new IP is in a Yandex Cloud range before using it:
+  `whois <ip> | grep netname` must return `RU-YANDEXCLOUD-*`, otherwise recreate the VM
