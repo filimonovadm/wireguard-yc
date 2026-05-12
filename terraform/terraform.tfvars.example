@@ -1,0 +1,5 @@
+yc_token            = "your-iam-token"
+cloud_id            = "your-cloud-id"
+folder_id           = "your-folder-id"
+subnet_id           = "your-subnet-id-in-ru-central1-a"
+ssh_public_key_path = "~/.ssh/id_ed25519.pub"
