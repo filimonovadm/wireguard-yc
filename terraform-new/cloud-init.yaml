@@ -1,0 +1,17 @@
+#cloud-config
+users:
+  - name: wgadmin
+    groups: sudo
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - ${ssh_public_key}
+
+packages:
+  - wireguard
+  - qrencode
+  - iptables-persistent
+
+runcmd:
+  - echo 'net.ipv4.ip_forward=1' >> /etc/sysctl.conf
+  - sysctl -p

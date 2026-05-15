@@ -1,0 +1,6 @@
+yc_token            = ""                       # yc iam create-token
+cloud_id            = "b1g0og5epa4gl51a0d7f"
+folder_id           = "b1g7scs6lgrf9ijk4dff"
+network_id          = ""                       # yc vpc network list --folder-id <folder_id>
+ssh_public_key_path = "~/.ssh/id_ed25519.pub"
+zone                = "ru-central1-b"          # try ru-central1-b first for 158.160.x.x range
